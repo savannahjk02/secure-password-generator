@@ -1,6 +1,3 @@
-// Assignment Code
-var generateBtn = document.querySelector("#generate");
-
 // password character length variable
 var numOfCharacters = 12;
 var characterArray = [];
@@ -15,43 +12,72 @@ var numbers = ["1","2","3","4","5","6","7","8","9","0"];
 //password special characters variable
 var specialCharacters = ["!","@","#","$","%","^","&","*","(",")"];
 
-generateBtn.textContent = "Generate Password";
+// Assignment Code
+var generateBtn = document.querySelector("#generate");
 
-  //create function (function declaration/expression)
-function generatePassword(){
+// Add event listener to generate button
+ generateBtn.addEventListener("click", writePassword);
 
-// prompt: password length
-var numOfCharacters = prompt ("How many characters do you want?");
-
-// prompt: password lowercase letters
-var lowercaseCharacters = confirm ("Do you want to include lowercase characters?");
-
-// prompt: password uppercase characters
-var uppercaseCharacters = confirm ("Do you want to include uppercase characters?");
-
-// prompt: password numbers
-var numbers = confirm ("Do you want to include numbers?");
-
-// prompt: password special characters
-var specialCharacters = confirm ("Do you want to include special characters?");
-
-// 4 ifs, 4 confirmExpressionconditionals
-
-// processing... (random generate characters)
-
-// return password
-  return (generatePassword(numOfCharacters));
- }
 
 
 // Write password to the #password input
 function writePassword() {
- var password = generatePassword();
- var passwordText = document.querySelector("#password");
-
- passwordText.value = password;
-
+  prompts();
+  var passwordText = document.querySelector("#password");
+ 
+  if (prompts){
+    var randomPassword = generatePassword();
+    passwordText.value = randomPassword;
+  } else {
+    passwordText.value = "";
+  }
+  
+ }
+ 
+//create function (function declaration/expression)
+function generatePassword(){
+var password = "";
+for (var i=0; i < numOfCharacters; i++) {
+  var random = Math.floor(Math.random() * characterArray.length)
+// setting password value to contain random array with a length between 0 and password length choice, until each character is randomized
+  password = password + characterArray[random];
+}
+return password;
 }
 
-// Add event listener to generate button
-generateBtn.addEventListener("click", writePassword);
+function prompts() {
+// reset array to empty
+  characterArray = [];
+// prompt: password length
+numOfCharacters = parseInt(prompt("How many characters do you want?"));
+
+// if the input is not between 8-128 characters, user will be prompted to retry with a valid answer
+if (numOfCharacters < 8 || numOfCharacters > 128) {
+  alert ("Please choose a number of characters between 8 and 128.");
+  return false;
+}
+
+// prompt: password lowercase letters
+if (confirm ("Do you want to include lowercase characters?")) {
+// return = array containing lowercase characters
+  characterArray = characterArray.concat(lowercaseCharacters);
+}
+
+// prompt: password uppercase characters
+if (confirm ("Do you want to include uppercase characters?")) {
+// return = array containing uppercase characters
+  characterArray = characterArray.concat(uppercaseCharacters);
+}
+
+// prompt: password numbers
+if (confirm ("Do you want to include numbers?")) {
+// return = array containing numbers
+  characterArray = characterArray.concat(numbers);
+}
+// prompt: password special characters
+if (confirm ("Do you want to include special characters?")) {
+// return = array containing special characters
+  characterArray = characterArray.concat(specialCharacters);
+}
+return true;
+}
